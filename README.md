@@ -1,6 +1,21 @@
-# gitnap
+# GitNap: 
+## Automating Git for the Lazy
+
+## ctrl+s :v:
+
+GitNap is a collection of Bash scripts aimed at making your Git experience as thrilling as watching paint dry. Because, after all, who needs excitement when it comes to version control? If you’re the kind of person who knows that the second time you run a command deserves a script…
+
+
+## Usage
+
+For added convenience, you can add the src directory to your PATH, allowing you to execute the scripts directly from any location. Alternatively, you can use the scripts independently, customizing the src/utils/auth.sh script to meet your specific needs. This script is responsible for retrieving access credentials and can be adapted to use other forms of authentication, such as .env files or environment variables.
+
+The complete documentation serves as an essential complement to this work, providing a more comprehensive and detailed overview of the tool's features and capabilities.
+<a href="https://github.com/rmottanet/gitnap.wiki.git"><img alt="Static Badge" src="https://img.shields.io/badge/gitnap-documentation?style=social&logo=github&logoSize=auto&label=docs&link=https%3A%2F%2Fgithub.com%2Frmottanet%2Fgitnap.wiki.git"></a>
 
 ---
+
+Thank you for considering **GitNap** for your needs. While it may be a modest tool compared to others, I hope it proves useful in simplifying your interactions with Git services. If you have any feedback or suggestions, don't hesitate to reach out. Nice coding!
 
 <br />
 <br />
