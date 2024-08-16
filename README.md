@@ -11,7 +11,7 @@ GitNap is a collection of Bash scripts aimed at making your Git experience as th
 For added convenience, you can add the src directory to your PATH, allowing you to execute the scripts directly from any location. Alternatively, you can use the scripts independently, customizing the src/utils/auth.sh script to meet your specific needs. This script is responsible for retrieving access credentials and can be adapted to use other forms of authentication, such as .env files or environment variables.
 
 The complete documentation serves as an essential complement to this work, providing a more comprehensive and detailed overview of the tool's features and capabilities.
-<a href="https://github.com/rmottanet/gitnap.wiki.git"><img alt="Static Badge" src="https://img.shields.io/badge/gitnap-documentation?style=social&logo=github&logoSize=auto&label=docs&link=https%3A%2F%2Fgithub.com%2Frmottanet%2Fgitnap.wiki.git"></a>
+<a href="https://github.com/rmottanet/gitnap/wiki"><img alt="Static Badge" src="https://img.shields.io/badge/gitnap-documentation?style=social&logo=github&logoSize=auto&label=docs&link=https%3A%2F%2Fgithub.com%2Frmottanet%2Fgitnap%2Fwiki"></a>
 
 ---
 
