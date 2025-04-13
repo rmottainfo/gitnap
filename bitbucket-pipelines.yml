@@ -1,0 +1,47 @@
+image: python:3.9
+
+pipelines:
+
+  pull-requests:
+    '**':
+      - step:
+          name: 'Mirror to GitHub'
+          script:
+            - if [ "$BITBUCKET_BRANCH" == "main" ]; then
+                export REPO_NAME=$(echo $BITBUCKET_REPO_FULL_NAME | cut -d'/' -f2);
+                git remote add github https://$GITHUB_TOKEN@github.com/rmottanet/$REPO_NAME.git;
+                git fetch --prune;
+                git push github $BITBUCKET_BRANCH;
+              fi
+
+      - step:
+          name: 'Mirror to GitLab'
+          script:
+            - if [ "$BITBUCKET_BRANCH" == "main" ]; then
+                export REPO_NAME=$(echo $BITBUCKET_REPO_FULL_NAME | cut -d'/' -f2);
+                git remote add gitlab https://oauth2:$GITLAB_TOKEN@gitlab.com/rmottanet/$REPO_NAME.git;
+                git fetch --prune;
+                git push gitlab $BITBUCKET_BRANCH;
+              fi
+
+  custom:
+    manual-mirror:
+      - step:
+          name: 'Mirror to GitHub'
+          script:
+            - export REPO_NAME=$(echo $BITBUCKET_REPO_FULL_NAME | cut -d'/' -f2)
+            - git remote add github https://$GITHUB_TOKEN@github.com/rmottanet/$REPO_NAME.git
+            - git fetch --prune
+            - git fetch origin
+            - git pull github main --rebase
+            - git push github $BITBUCKET_BRANCH
+
+      - step:
+          name: 'Mirror to GitLab'
+          script:
+            - export REPO_NAME=$(echo $BITBUCKET_REPO_FULL_NAME | cut -d'/' -f2)
+            - git remote add gitlab https://oauth2:$GITLAB_TOKEN@gitlab.com/rmottanet/$REPO_NAME.git
+            - git fetch --prune
+            - git fetch origin
+            - git pull gitlab main --rebase
+            - git push gitlab $BITBUCKET_BRANCH

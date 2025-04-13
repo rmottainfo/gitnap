@@ -1,0 +1,34 @@
+# GitLab Pipeline
+
+stages:
+  - mirror
+
+# Mirroring on Github
+mirror_github:
+  stage: mirror
+  script:
+    - export REPO_NAME=$(echo $CI_PROJECT_PATH | cut -d'/' -f2)
+    - git config --global user.email ${GITHUB_EMAIL}
+    - git config --global user.name ${GITHUB_USER}
+    - git remote add github https://${GITHUB_TOKEN}@github.com/rmottanet/$REPO_NAME.git
+    - git checkout -b main
+    - git fetch github
+    - git pull github main --rebase
+    - git push --set-upstream github main
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /Merge branch/i'
+
+# Mirroring on Bitbucket
+mirror_bitbucket:
+  stage: mirror
+  script:
+    - export REPO_NAME=$(echo $CI_PROJECT_PATH | cut -d'/' -f2)
+    - echo "REPO_NAME is $REPO_NAME"
+    - git config --global user.email ${BITBUCKET_EMAIL}
+    - git remote add bitbucket https://x-token-auth:${BITBUCKET_TOKEN}@bitbucket.org/rmottalabs/$REPO_NAME.git
+    - git checkout -b main
+    - git pull bitbucket main --rebase
+    - git push --set-upstream bitbucket main
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /Merge branch/i'
+
