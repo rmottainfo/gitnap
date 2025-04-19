@@ -1,5 +1,4 @@
-# GitNap: 
-## Automating Git for the Lazy
+# GitNap: Bash Script Collection
 
 ## ctrl+s :v:
 

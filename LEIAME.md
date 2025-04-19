@@ -1,5 +1,4 @@
-# GitNap: 
-## Automatizando o Git para os Preguiçosos
+# GitNap: Bash Script Collection
 
 ## ctrl+s :v:
 
