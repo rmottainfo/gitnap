@@ -1,0 +1,35 @@
+name: Delete Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner_name:
+        description: 'Github repo owner name.'
+        required: true
+        default: 'github'
+      repo_name:
+        description: 'Github new repo name.'
+        required: false
+        default: 'new-repo'
+
+jobs:
+  delete_repository:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Delete a new repo
+        id: delete_repo 
+        env:
+          REPO_OWNER_NAME: ${{ github.event.inputs.owner_name }}
+          REPO_NAME: ${{ github.event.inputs.repo_name }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if gh repo delete "${REPO_OWNER_NAME}/${REPO_NAME}" \
+            --yes; then
+            echo "::notice::Repository '$REPO_NAME' deleted successfully!"
+            exit 0
+          else
+            echo "::error::Failed to create repository '$NEW_REPO_NAME'."
+            exit 1
+          fi
