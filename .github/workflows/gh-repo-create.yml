@@ -1,0 +1,41 @@
+name: Create Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner_name:
+        description: 'Github repo owner name.'
+        required: true
+        default: 'github'
+      new_repo_name:
+        description: 'Github new repo name.'
+        required: false
+        default: 'new-repo'
+      new_repo_description:
+        description: 'Github repo description.'
+        required: false
+        default: 'Some description'
+
+jobs:
+  create_repository:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Create a new repo
+        id: create_new_repo 
+        env:
+          REPO_OWNER_NAME: ${{ github.event.inputs.owner_name }}
+          NEW_REPO_NAME: ${{ github.event.inputs.new_repo_name }}
+          NEW_REPO_DESCRIPTION: ${{ github.event.inputs.new_repo_description }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if gh repo create "${REPO_OWNER_NAME}/${NEW_REPO_NAME}" \
+            --description "$NEW_REPO_DESCRIPTION" \
+            --private; then
+            echo "::notice::Repository '$NEW_REPO_NAME' created successfully!"
+            exit 0
+          else
+            echo "::error::Failed to create repository '$NEW_REPO_NAME'."
+            exit 1
+          fi
