@@ -1,0 +1,28 @@
+name: List Repositories and Save
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner_name:
+        description: 'Github repo owner name.'
+        required: true
+        default: 'github'
+      limit_output:
+        description: 'Github repo owner name.'
+        required: false
+        default: '100'
+
+jobs:
+  list_repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Repositories
+        run: gh repo list ${{ github.event.inputs.owner_name }} --limit ${{ github.event.inputs.limit_output }} > repositories.txt
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          
+      - name: Save file as artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repositories-list
+          path: repositories.txt
