@@ -1,0 +1,41 @@
+name: Create a Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Repositório de destino (ex: owner/repo-name)'
+        required: true
+      source_branch:
+        description: 'Branch de origem (head)'
+        required: true
+      target_branch:
+        description: 'Branch de destino (base)'
+        required: true
+      title:
+        description: 'Título do Pull Request'
+        required: true
+      body:
+        description: 'Corpo do Pull Request'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          gh pr create \
+            --repo ${{ github.event.inputs.repo }} \
+            --title "${{ github.event.inputs.title }}" \
+            --body "${{ github.event.inputs.body }}" \
+            --head ${{ github.event.inputs.source_branch }} \
+            --base ${{ github.event.inputs.target_branch }}
+          
+          echo "::notice title=Criação de PR Concluída::O Pull Request foi criado com sucesso."

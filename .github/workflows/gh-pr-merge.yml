@@ -1,0 +1,25 @@
+name: Merge Squesh a Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_url:
+        description: 'Pull Request link.'
+        required: true
+        default: 'https://github.com/owner/repo-name/pull/1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge Squash a Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.inputs.pr_url }} --squash
+          
+          echo "::notice title=Merge Concluído::O Pull Request foi mesclado com sucesso."
