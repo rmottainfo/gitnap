@@ -1,0 +1,28 @@
+name: Get a team by name
+
+on:
+  workflow_dispatch:
+    inputs:
+      org:
+        description: 'Org name.'
+        required: true
+        default: 'ws2git'
+      team:
+        description: 'Team name.'
+        required: true
+        default: 'ops'
+
+jobs:
+  get_org_team:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get a team by name
+        env:
+          ORG: "${{ github.event.inputs.org }}"
+          TEAM_SLUG: "${{ github.event.inputs.team }}"
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/"$ORG"/teams/"$TEAM_SLUG"
