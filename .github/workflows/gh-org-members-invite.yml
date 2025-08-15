@@ -1,0 +1,41 @@
+name: Members Invitation
+
+on:
+  workflow_dispatch:
+    inputs:
+      org:
+        description: 'Organization.'
+        required: true
+        default: 'ws2git'
+      user:
+        description: 'User to invite.'
+        required: true
+        default: 'user@email.com'
+      team:
+        description: 'Team ID.'
+        required: false
+        default: '1234567'
+
+jobs:
+  invite_member_to_org:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invite a Member
+        env:
+          ORG: "${{ github.event.inputs.org }}"
+          USER: "${{ github.event.inputs.user }}"
+          TEAM_ID: "${{ github.event.inputs.team }}"
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/"$ORG"/invitations \
+            --input - <<< '{
+              "email": "'"$USER"'",
+              "role": "direct_member",
+              "team_ids": [
+                  '$TEAM_ID'
+              ]
+            }'
