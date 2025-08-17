@@ -1,4 +1,4 @@
-name: Merge Squesh a Pull Request
+name: Merge Pull Request
 
 on:
   workflow_dispatch:
@@ -7,6 +7,15 @@ on:
         description: 'Pull Request link.'
         required: true
         default: 'https://github.com/owner/repo-name/pull/1'
+      merge_strategy:
+        description: 'Merge Strategy'
+        required: true
+        default: 'squash'
+        type: choice
+        options:
+          - squash
+          - merge
+          - rebase
 
 permissions:
   contents: write
@@ -16,10 +25,27 @@ jobs:
   merge_pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Merge Squash a Pull Request
+      - name: Merge Pull Request
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          gh pr merge ${{ github.event.inputs.pr_url }} --squash
-          
-          echo "::notice title=Merge Concluído::O Pull Request foi mesclado com sucesso."
+          set -e
+          PR_URL="${{ github.event.inputs.pr_url }}"
+          STRATEGY="${{ github.event.inputs.merge_strategy }}"
+          if [ "$STRATEGY" = "squash" ]; then
+            MERGE_OPTION="--squash"
+          elif [ "$STRATEGY" = "rebase" ]; then
+            MERGE_OPTION="--rebase"
+          else
+            MERGE_OPTION="--merge"
+          fi
+          # ----
+          echo "Tentando fazer merge do PR: $PR_URL utilizando a estratégia: $STRATEGY"
+          # ----
+          # Doc https://cli.github.com/manual/gh_pr_merge
+          if gh pr merge "$PR_URL" $MERGE_OPTION; then
+            echo "::notice title=Merge Concluído::O Pull Request foi mesclado com sucesso usando a estratégia '$STRATEGY'."
+          else
+            echo "::error title=Erro ao Mesclar::Falha ao realizar merge do Pull Request usando a estratégia '$STRATEGY'."
+            exit 1
+          fi
