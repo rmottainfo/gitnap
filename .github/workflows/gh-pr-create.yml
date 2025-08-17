@@ -4,19 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'Repositório de destino (ex: owner/repo-name)'
+        description: 'Repository (ex: owner/repo-name)'
         required: true
       source_branch:
-        description: 'Branch de origem (head)'
+        description: 'Source branch (head)'
         required: true
       target_branch:
-        description: 'Branch de destino (base)'
+        description: 'Target branch (base)'
         required: true
       title:
-        description: 'Título do Pull Request'
+        description: 'Pull Request title'
         required: true
       body:
-        description: 'Corpo do Pull Request'
+        description: 'Pull Request body'
         required: false
 
 permissions:
@@ -31,11 +31,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          gh pr create \
+          echo "Creating Pull Request..."   
+          # Tenta criar o PR e verifica o código de saída.
+          # O "GH_DEBUG=true" adiciona mais detalhes úteis em caso de falha.
+          if GH_DEBUG=true gh pr create \
             --repo ${{ github.event.inputs.repo }} \
             --title "${{ github.event.inputs.title }}" \
             --body "${{ github.event.inputs.body }}" \
             --head ${{ github.event.inputs.source_branch }} \
-            --base ${{ github.event.inputs.target_branch }}
-          
-          echo "::notice title=Criação de PR Concluída::O Pull Request foi criado com sucesso."
+            --base ${{ github.event.inputs.target_branch }}; then
+            echo "::notice title=PR Creation Completed::The Pull Request was successfully created."
+          else
+            echo "::error title=Failed to Create PR::The command to create the Pull Request failed. Check the log for more details."
+            exit 1
+          fi
