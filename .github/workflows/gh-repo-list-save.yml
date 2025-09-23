@@ -1,4 +1,7 @@
 name: List Repositories and Save
+permissions:
+  contents: read
+  actions: read
 
 on:
   workflow_dispatch:
