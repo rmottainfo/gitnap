@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # This section loads configuration files needed to set environment variables
 # such as GITHUB_TOKEN. If these variables are already exported globally in the shell, 
