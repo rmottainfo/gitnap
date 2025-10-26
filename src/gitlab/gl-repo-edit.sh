@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 
 function edit_gitlab_repo() {
