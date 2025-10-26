@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 source "$GITNAP/utils/down_gitignore.sh"
 source "$GITNAP/utils/down_license.sh"

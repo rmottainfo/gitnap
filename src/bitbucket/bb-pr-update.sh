@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # Authentication and default settings
 source "$GITNAP/utils/auth.sh"
